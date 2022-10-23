@@ -9,12 +9,14 @@ class Order(models.Model):
     is_completed = models.BooleanField(default=False)
     total = models.PositiveIntegerField()
     created_on = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
 
 
 class OrderItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    objects = models.Manager()
 
 
 class PaymentOrder(models.Model):
@@ -23,3 +25,4 @@ class PaymentOrder(models.Model):
     amount = models.PositiveIntegerField()
     status = models.BooleanField(default=False)
     time = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
