@@ -10,7 +10,7 @@ from store.models import Item
 def bag_summary(request):
     bag = Bag(request)
     context = {'bag': bag}
-    return render(request, 'orders/summary.html', context=context)
+    return render(request, 'orders/bag_summary.html', context=context)
 
 
 def bag_add(request):

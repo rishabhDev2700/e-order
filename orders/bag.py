@@ -17,7 +17,7 @@ class Bag:
         if item_id in self.bag:
             self.bag['item_id']['quantity'] = quantity
         else:
-            self.bag['item_id'] = {'price': item.price, 'quantity': quantity}
+            self.bag['item_id'] = {'price': str(item.price), 'quantity': quantity}
         self.save()
 
     def update(self, item, quantity):
