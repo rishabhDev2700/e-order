@@ -15,15 +15,15 @@ class Bag:
     def add(self, item, quantity):
         item_id = str(item.id)
         if item_id in self.bag:
-            self.bag['item_id']['quantity'] = quantity
+            self.bag[item_id]['quantity'] = quantity
         else:
-            self.bag['item_id'] = {'price': str(item.price), 'quantity': quantity}
+            self.bag[item_id] = {'price': str(item.price), 'quantity': quantity}
         self.save()
 
     def update(self, item, quantity):
         item_id = str(item.id)
         if item_id in self.bag:
-            self.bag['item_id']['quantity'] = quantity
+            self.bag[item_id]['quantity'] = quantity
         self.save()
 
     def delete(self, item):

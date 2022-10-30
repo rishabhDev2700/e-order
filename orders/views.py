@@ -20,7 +20,6 @@ def bag_add(request):
         quantity = int(request.POST.get("quantity"))
         item = get_object_or_404(Item, id=item_id)
         bag.add(item=item, quantity=quantity)
-
         bag_quantity = bag.__len__()
         response = JsonResponse({"quantity": bag_quantity})
         return response
