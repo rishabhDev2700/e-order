@@ -1,0 +1,58 @@
+{%extends 'base.html'%}
+{%block title%}Bag Summary{%endblock%}
+{%block content%}
+<div class="lg:mx-10">
+    <h2 class="text-center text-4xl my-5">Your Bag</h2>
+    <div class="text-center">
+        <button
+                class="rounded-xl my-5 px-4 py-3 text-slate-600 hover:text-white border-2 border-slate-600 hover:bg-slate-600 hover:shadow-md hover:shadow-slate-600 ease-in-out duration-150 text-xl">
+            Clear
+            Bag
+        </button>
+    </div>
+    <div class="flex flex-col justify-center items-center px-3">
+        {% for item in bag %}
+        {%with product=item.item%}
+        <div
+                class="product-card flex justify-around items-center border-2 border-orange-300 rounded-lg mx-3 my-2 p-1  hover:shadow-sm hover:shadow-orange-500 hover:scale-105 ease-in-out duration-200 md:w-96"  data-index="{{product.id}}">
+            <img class="object-cover w-36 h-36 rounded-xl mx-3" src="{{product.cover.url}}" alt="">
+            <div class="">
+                <div class="text-xl">{{product.name}}</div>
+                <div class="">{{product.category}}</div>
+                <div class="text-black">Price: {{product.price}}</div>
+                <div class="buttons">
+                    <label for="quantity{{product.id}}">Qnty</label>
+                    <select class="m-2" name="quantity" id="quantity{{product.id}}">
+                        <option value="" selected hidden>{{item.quantity}}</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                    <div>
+                        <button id="update-button"
+                                class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-2 py-1 rounded-xl m-2 ease-in-out duration-150">
+                            Update
+                        </button>
+                        <button id="remove-button"
+                                class="border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-2 py-1 rounded-xl m-2 ease-in-out duration-150">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%endwith%}
+        {% endfor %}
+        <div class="mx-auto border-2 border-orange-300 rounded-lg p-3 my-4" id="subtotal">Total: {{bag.get_subtotal}}</div>
+    </div>
+
+</div>
+
+{%endblock%}

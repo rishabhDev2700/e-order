@@ -1,0 +1,166 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@300;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'main.css'%}">
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+
+<body class="font-signika text-white">
+<div class="sticky top-0 left-0 w-full bg-orange-500">
+    <header
+            class="p-3 text-center flex flex-col border-b-2 border-orange-300 shadow-md shadow-orange-800 lg:flex-row lg:justify-around lg:items-center">
+        <div class="flex justify-between font-caveat">
+            <a href="{%url 'store:home'%}">
+                <h1 class="text-5xl m-2 hover:scale-105 ease-in-out duration-300"><span
+                        class="font-extrabold">Foodie</span>'s Stop</h1>
+            </a>
+            <button id="menu-button"><img class="w-12 h-auto p-2 mx-2 bg-white rounded-xl lg:hidden"
+                                          src="{%static 'menu.png'%}" alt=""></button>
+        </div>
+        <div id="navbar" class="hidden lg:block">
+            <nav class="text-center text-2xl flex flex-col lg:flex-row items-center">
+                <a class="p-3 hover:text-orange-800 rounded-xl mx-2" href="{%url 'store:home'%}">Home</a>
+                <a class="p-3 hover:text-orange-800 rounded-xl mx-2" href="{%url 'store:show_all_categories'%}">Categories</a>
+                <a class="p-3 hover:text-orange-800 rounded-xl mx-2" href="{%url 'store:show_all_items'%}">All Items</a>
+                <div class="buttons text-white font-signika my-2 mx-3 lg:items-center">
+                    <div class="buttons text-white font-signika my-2 mx-3 lg:items-center">
+                        {%if not user.is_authenticated%}
+                        <a href="{%url 'orders:summary'%}"
+                           class="bg-sky-500 shadow-md ease-in-out duration-300 hover:shadow-sky-600  px-4 py-2 rounded-full">Sign
+                            In</a>
+                        <a href="{%url ''%}"
+                           class="bg-green-500 shadow-md ease-in-out duration-300 hover:shadow-green-600 px-4 py-2 rounded-full">Sign
+                            Up</a>
+                        {%else%}
+                        <a href="{%url 'orders:summary'%}"
+                           class="bg-white text-black hover:bg-green-600 px-4 py-2 rounded-full shadow-md ease-in-out duration-300 hover:shadow-green-600">Your
+                            Bag</a>
+                        <a href="{%url 'orders:summary'%}"
+                           class="bg-red-500 hover:bg-white hover:text-red-500 px-4 py-2 rounded-full shadow-md ease-in-out duration-300 hover:shadow-red-600">Logout</a>
+                        {%endif%}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+</div>
+<div class="w-full text-orange-500">
+
+    {% block content %}
+
+
+    {% endblock content %}
+
+</div>
+
+<footer class="bg-orange-500 text-white p-3 flex flex-col justify-center content-center">
+    <ul class="flex justify-center font-normal">
+        <li><a class="mx-2" href="{%url 'store:show_all_items'%}">Home</a></li>
+        <li><a class="mx-2" href="{%url 'store:show_all_categories'%}">Categories</a></li>
+        <li><a class="mx-2" href="{%url 'accounts:sign_up'%}">Register</a></li>
+    </ul>
+    <div class="text-center font-thin mt-3">
+        <h4>Created by Rishabhdev2700</h4>
+        <h4>Copyright © 2022 Fuzzydevs</h4>
+    </div>
+</footer>
+
+
+<script src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function () {
+            $('#menu-button').click(function () {
+                $('#navbar').toggle()
+            })
+        })
+
+<!--add-->
+
+ $(document).on('click', '#add-button', function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        url: '{% url "orders:bag_add" %}',
+        data: {
+          item_id: $('#add-button').val(),
+          quantity: $("#quantity" + item_id + " option:selected").text(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (json) {
+          document.getElementById("bag-quantity").innerHTML = json.quantity
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+
+<!--delete-->
+
+ $(document).on("click", "#remove-button", function (e) {
+    e.preventDefault();
+    var item_id = $(this).data("index");
+    $.ajax({
+      type: "POST",
+      url: '{% url "orders:bag_delete" %}',
+      data: {
+        item_id: $(this).data("index"),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "post",
+      },
+      success: function (json) {
+        $('.product-card[data-index="' + item_id + '"]').remove();
+
+        if (json.quantity == 0) {
+          subtotal = 0
+        } else {
+          subtotal = json.subtotal
+        }
+
+        document.getElementById("bag-quantity").innerHTML = json.quantity;
+        document.getElementById("subtotal").innerHTMl = json.subtotal
+      },
+      error: function (xhr, errmsg, err) {},
+    });
+  });
+
+<!--update-->
+
+ $(document).on("click", "#update-button", function (e) {
+    e.preventDefault();
+    var item_id = $(this).data("index");
+    $.ajax({
+      type: "POST",
+      url: '{% url "orders:bag_update" %}',
+      data: {
+        item_id: $(this).data("index"),
+        quantity: $("#quantity" + item_id + " option:selected").text(),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "post",
+      },
+      success: function (json) {
+        document.getElementById("bag-quantity").innerHTML = json.quantity;
+        document.getElementById("subtotal").innerHTML = json.subtotal;
+      },
+      error: function (xhr, errmsg, err) {},
+    });
+  });
+
+
+
+</script>
+</body>
+
+</html>
