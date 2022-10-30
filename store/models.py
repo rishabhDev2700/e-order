@@ -10,6 +10,9 @@ class Category(models.Model):
     objects = models.Manager()
     slug = models.SlugField(max_length=40)
 
+    class Meta:
+        verbose_name_plural = "Categories"
+
     def get_absolute_url(self):
         return reverse('store:show_by_category', args=[self.slug])
 
