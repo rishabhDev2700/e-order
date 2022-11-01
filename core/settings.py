@@ -12,14 +12,19 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+env = environ.Env()
+environ.Env.read_env()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e=zl0lqva26tyd1(9=40sa#!r+8%!tt@=$y5ujn_a!@ix&avrp'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,6 +43,11 @@ INSTALLED_APPS = [
     'accounts',
     'orders',
     'store',
+    'payment',
+
+    # 3rd party
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +77,9 @@ TEMPLATES = [
         },
     },
 ]
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
@@ -116,7 +129,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = 'collected/'
-STATICFILES_DIRS = [BASE_DIR/'static/']
+STATICFILES_DIRS = [BASE_DIR / 'static/']
 MEDIA_URL = 'media/'
 MEDIA_ROOT = 'media/'
 
@@ -127,3 +140,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = ""
 LOGIN_URL = ""
+RAZORPAY_ID = env('RAZORPAY_ID')
+RAZORPAY_SECRET_KEY = env('RAZORPAY_SECRET_KEY')
