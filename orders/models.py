@@ -10,6 +10,7 @@ class Order(models.Model):
     is_completed = models.BooleanField(default=False)
     total = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
+    razorpay_order_id = models.CharField(max_length=22)
     objects = models.Manager()
 
 
@@ -18,13 +19,4 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(decimal_places=2, max_digits=5, default=0)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    objects = models.Manager()
-
-
-class PaymentOrder(models.Model):
-    pay_id = models.CharField(max_length=22)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    amount = models.PositiveIntegerField()
-    status = models.BooleanField(default=False)
-    time = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()

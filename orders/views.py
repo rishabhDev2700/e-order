@@ -21,7 +21,7 @@ def bag_add(request):
         item = get_object_or_404(Item, id=item_id)
         bag.add(item=item, quantity=quantity)
         bag_quantity = bag.__len__()
-        response = JsonResponse({"quantity": bag_quantity})
+        response = JsonResponse({"quantity": bag_quantity, 'message': f'{item.name} added'})
         return response
 
 
@@ -29,11 +29,11 @@ def bag_delete(request):
     bag = Bag(request)
     if request.POST.get("action") == "post":
         item_id = int(request.POST.get("item_id"))
-        bag.delete(item=item_id)
-
+        item = get_object_or_404(Item, id=item_id)
+        bag.delete(item=item)
         bag_quantity = bag.__len__()
         bag_subtotal = bag.get_subtotal()
-        response = JsonResponse({"quantity": bag_quantity, "subtotal": bag_subtotal})
+        response = JsonResponse({"quantity": bag_quantity, "subtotal": bag_subtotal, 'message': f'{item.name} removed'})
         return response
 
 
@@ -42,12 +42,18 @@ def bag_update(request):
     if request.POST.get("action") == "post":
         item_id = int(request.POST.get("item_id"))
         quantity = int(request.POST.get("quantity"))
-        bag.update(item=item_id, quantity=quantity)
-
+        item = get_object_or_404(Item, id=item_id)
+        bag.update(item=item, quantity=quantity)
         bag_quantity = bag.__len__()
         bag_subtotal = bag.get_subtotal()
-        response = JsonResponse({"quantity": bag_quantity, "subtotal": bag_subtotal})
+        response = JsonResponse({"quantity": bag_quantity, "subtotal": bag_subtotal, 'message': f'{item.name} updated'})
         return response
+
+
+def bag_clear(request):
+    bag = Bag(request)
+    bag.clear()
+    return JsonResponse({'quantity': 0, 'subtotal': 0, 'message': 'Bag Cleared'})
 
 
 def order_add(request):

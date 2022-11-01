@@ -8,4 +8,5 @@ urlpatterns = [
     path('add/', views.bag_add, name='bag_add'),
     path('update/', views.bag_update, name='bag_update'),
     path('delete/', views.bag_delete, name='bag_delete'),
+    path('clear/', views.bag_clear, name='bag_clear'),
 ]
