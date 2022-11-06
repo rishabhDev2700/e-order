@@ -13,6 +13,9 @@ class Order(models.Model):
     razorpay_order_id = models.CharField(max_length=22)
     objects = models.Manager()
 
+    class Meta:
+        ordering = ['-created_on']
+
 
 class OrderItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
