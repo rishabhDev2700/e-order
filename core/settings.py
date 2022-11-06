@@ -29,7 +29,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'orders',
     'store',
     'payment',
+    'admin',
 
     # 3rd party
     'crispy_forms',
@@ -138,7 +139,7 @@ MEDIA_ROOT = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = ""
-LOGIN_URL = ""
+LOGOUT_URL = 'accounts:logout'
+LOGIN_URL = "accounts:sign_in"
 RAZORPAY_ID = env('RAZORPAY_ID')
 RAZORPAY_SECRET_KEY = env('RAZORPAY_SECRET_KEY')
