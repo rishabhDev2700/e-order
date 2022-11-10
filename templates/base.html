@@ -30,7 +30,7 @@
             <button id="menu-button"><img class="w-12 h-auto p-2 mx-2 bg-white rounded-xl lg:hidden"
                                           src="{%static 'menu.png'%}" alt=""></button>
         </div>
-        <div id="navbar" class="hidden lg:block">
+        <div id="navbar" class="hidden lg:block ease-in-out duration-200">
             <nav class="text-center text-2xl flex flex-col lg:flex-row items-center">
                 <a class="p-3 hover:text-orange-800 rounded-xl mx-2" href="{%url 'store:home'%}">Home</a>
                 <a class="p-3 hover:text-orange-800 rounded-xl mx-2" href="{%url 'store:show_all_categories'%}">Categories</a>
@@ -97,11 +97,11 @@
 <script>
 $(document).ready(function () {
             $('#menu-button').click(function () {
-                $('#navbar').toggle();
+                $('#navbar').fadeToggle();
             })
             $('#message-close').click(function(){
-                $('#message').remove();
-                $('#message-close').remove();
+                $('#message').fadeOut(300, function() { $(this).remove(); });
+                $('#message-close').fadeOut(300, function() { $(this).remove(); });
             })
         })
         {%block script%}
