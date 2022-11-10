@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+app_name = 'store_admin'
+
 urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('categories/', views.all_categories, name='all_categories'),

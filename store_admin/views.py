@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.http import Http404
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
-from store_admin.forms import CategoryForm, ItemForm
 from store.models import Item, Category
+from store_admin.forms import CategoryForm, ItemForm
 
 
 def dashboard(request):
@@ -21,7 +21,7 @@ def category_add(request):
         else:
             messages.error(request, 'Some Error Occurred!! Please Try Again.')
     form = CategoryForm()
-    context = {'form': form}
+    context = {'title': 'Add Category', 'form': form}
     return render(request, 'store_admin/form.html', context=context)
 
 
@@ -36,7 +36,7 @@ def category_update(request, slug):
         else:
             messages.error(request, "Some Error Occurred!! Please Try Again")
     form = CategoryForm(instance=category)
-    context = {'form': form}
+    context = {'title': 'Update Category', 'form': form}
     return render(request, 'store_admin/form.html', context=context)
 
 
@@ -56,7 +56,7 @@ def category_delete(request):
 
 def all_categories(request):
     categories = Category.objects.all()
-    context = {'categories': categories}
+    context = {'title': 'Categories', 'categories': categories}
     return render(request, 'store_admin/all_objects.html', context=context)
 
 
@@ -67,7 +67,8 @@ def item_add(request):
             form.save()
             messages.success(request, "Item Added Successfully")
             return redirect('items')
-    context = {}
+    form = ItemForm()
+    context = {'title': 'Add Item', 'form': form}
     return render(request, 'store_admin/form.html', context=context)
 
 
@@ -82,7 +83,7 @@ def item_update(request, slug):
         else:
             messages.error(request, "Some Error Occurred!!")
     form = ItemForm(instance=item)
-    context = {'form': form}
+    context = {'title': 'Update Item', 'form': form}
     return render(request, 'store_admin/form.html', context=context)
 
 
@@ -100,7 +101,7 @@ def item_delete(request, pk):
 
 def all_items(request):
     items = Item.objects.all()
-    context = {'items': items}
+    context = {'title': 'All Items', 'items': items}
     return render(request, 'store_admin/all_objects.html', context=context)
 
 
