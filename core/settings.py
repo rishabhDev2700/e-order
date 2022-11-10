@@ -28,7 +28,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-
+DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'store_admin.middleware.LoginRequiredAccess'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -78,9 +79,9 @@ TEMPLATES = [
         },
     },
 ]
-CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwindcss"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
-CRISPY_TEMPLATE_PACK = "tailwindcss"
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
