@@ -11,42 +11,84 @@
 </head>
 
 <body>
-    <header
+<header
         class="bg-orange-500 text-white p-4 text-3xl font-light text-center flex justify-around items-center fixed top-0 z-10 w-full shadow-md shadow-orange-900">
-        <img class="hover:scale-105 ease-out duration-300" id="menu" src="{%static 'menu.png'%}" alt="">
-        <a href="{%url 'store_admin:dashboard'%}"><div class="self-center mx-auto"><span class="">Foodie's
-                <span class="font-bold my-auto">Admin</span></span></div></a>
-        <div class="hidden md:inline mx-auto text-orange-900 bg-white p-2 rounded-xl font-semibold">Welcome {{request.user}}</div>
-        <div class="hidden md:inline">Todays's Date</div>
-    </header>
-    <div id="navbar" class="absolute top-16 -translate-x-48 ease-in duration-300 h-screen text-center shadow-xl shadow-orange-900 bg-orange-300">
-        <nav class="flex flex-col pt-8">
-            <a class="px-2 py-4 w-48 bg-orange-400 text-white hover:bg-orange-600 ease-in-out duration-200" href="{%url 'store_admin:all_items'%}"><img
-                    class="inline-flex" width="40px" src="{%static 'platter.png'%}" alt="">Items</a>
-            <a class="px-2 py-4 w-48 bg-orange-400 text-white hover:bg-orange-600 ease-in-out duration-200" href=""><img
-                    class="inline-flex" width="40px" src="{%static 'fast-food.png'%}" alt="">Categories</a>
-            <a class="px-2 py-4 w-48 bg-orange-400 text-white hover:bg-orange-600 ease-in-out duration-200" href=""><img
-                    class="inline-flex" width="40px" src="{%static 'clock.png'%}" alt="">Orders</a>
-            <a class="px-2 py-4 w-48 bg-orange-400 text-white hover:bg-orange-600 ease-in-out duration-200" href=""><img
-                    class="inline-flex" width="40px" src="{%static 'price-tag.png'%}" alt="">Special</a>
-            <hr>
-            <hr>
-            <a class="px-1 py-4 w-48 bg-red-600 text-white hover:bg-rose-500 ease-in-out duration-200"
-                href="{%url 'accounts:logout'%}"><img class="inline-flex" width="40px" src="{%static 'logout.png'%}" alt="">Logout</a>
-        </nav>
+    <img class="hover:scale-105 ease-out duration-300" id="menu" src="{%static 'menu.png'%}" alt="">
+    <a href="{%url 'store_admin:dashboard'%}">
+        <div class="self-center mx-auto"><span class="">Foodie's
+                <span class="font-bold my-auto">Admin</span></span></div>
+    </a>
+    <div class="hidden md:inline mx-auto text-orange-900 bg-white p-2 rounded-xl font-semibold">Welcome
+        {{request.user}}
     </div>
-    {%block content%}
+    <div class="hidden md:inline" id="date">Date: {{date}}</div>
+</header>
+<div id="navbar"
+     class="fixed top-16 -translate-x-48 ease-in duration-300 h-screen text-center shadow-xl shadow-orange-900 bg-orange-300">
+    <nav class="flex flex-col pt-8">
+        <a class="px-2 py-4 w-48 bg-orange-400 text-white hover:bg-orange-600 ease-in-out duration-200"
+           href="{%url 'store_admin:all_items'%}"><img
+                class="inline-flex" width="40px" src="{%static 'platter.png'%}" alt="">Items</a>
+        <a class="px-2 py-4 w-48 bg-orange-400 text-white hover:bg-orange-600 ease-in-out duration-200"
+           href="{%url 'store_admin:all_categories'%}"><img
+                class="inline-flex" width="40px" src="{%static 'fast-food.png'%}" alt="">Categories</a>
+        <a class="px-2 py-4 w-48 bg-orange-400 text-white hover:bg-orange-600 ease-in-out duration-200" href=""><img
+                class="inline-flex" width="40px" src="{%static 'clock.png'%}" alt="">Orders</a>
+        <a class="px-2 py-4 w-48 bg-orange-400 text-white hover:bg-orange-600 ease-in-out duration-200" href=""><img
+                class="inline-flex" width="40px" src="{%static 'price-tag.png'%}" alt="">Special</a>
+        <hr>
+        <hr>
+        <a class="px-1 py-4 w-48 bg-red-600 text-white hover:bg-rose-500 ease-in-out duration-200"
+           href="{%url 'accounts:logout'%}"><img class="inline-flex" width="40px" src="{%static 'logout.png'%}" alt="">Logout</a>
+    </nav>
+</div>
+<div class="mt-24">
+    <div class="mt-12 flex justify-center">
+    {% if messages %}
+    <ul id="messages" class="flex flex-col justify-center items-center text-center w-screen">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }} text-lg rounded-xl px-3 py-3 border-2 border-orange-500 m-2"
+            {% endif %} id="message{{message.id}}">
+            {{ message }}
 
-    {%endblock%}
+        </li>
+        {% endfor %}
+    </ul>
+        <span id="message-close"><img
+                class="p-2 mx-3 my-3 ease-in-out duration-200 hover:scale-105 hover:border-orange-500 hover:bg-orange-600 rounded-full"
+                width="40px" src="https://cdn-icons-png.flaticon.com/512/1828/1828666.png" alt="close"></span>
+    {% endif %}
+</div>
+<div class="w-full lg:w-3/4 lg:mx-auto">
+    <div class="options flex justify-center">
+        <a class="bg-blue-500 text-white my-3 mx-2 p-2 rounded-xl hover:bg-blue-700 hover:shadow-blue-900 hover:shadow-md shadow-sky-700 ease-in-out duration-300 shadow-sm"
+           href="{%url 'store_admin:item_add'%}">+ Add Item</a>
+        <a class="bg-blue-500 text-white my-3 mx-2 p-2 rounded-xl hover:bg-blue-700 hover:shadow-blue-900 hover:shadow-md shadow-sky-700 ease-in-out duration-300 shadow-sm"
+           href="{%url 'store_admin:category_add'%}">+ Add Category</a>
+    </div>
+</div>
+</div>
+{%block content%}
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
+{%endblock%}
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
         $(document).ready(function () {
             $('#menu').on('click', function () {
                 $('#navbar').toggleClass('-translate-x-48');
+            });
+             $('#message-close').click(function(){
+                $('#messages').fadeOut(500, function() { $(this).remove(); });
+                $('#message-close').fadeOut(500, function() { $(this).remove(); });
             })
         })
-    </script>
+
+
+
+
+
+</script>
 </body>
 
 </html>

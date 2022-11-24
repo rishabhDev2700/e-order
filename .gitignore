@@ -1,5 +1,5 @@
 .idea/
 db.sqlite3
-core/.env
+core/settings/.env
 media
 collected

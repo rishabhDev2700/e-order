@@ -6,10 +6,10 @@
 {%block content%}
 <div class="mx-auto bg-white h-screen">
     <h1 class="text-center text-4xl my-5 text-black">Sign up</h1>
-<form action="{%url 'accounts:sign_up'%}" method="post" class="bg-white text-black mx-auto w-96 my-5">
+<form action="{%url 'accounts:sign_up'%}" method="post" class="bg-white text-black mx-auto w-80 my-5">
     {%csrf_token%}
-    {{form|crispy}}
-    <input class="bg-blue-500 px-4 py-3 m-3 rounded-xl text-white hover:bg-blue-600 hover:shadow-md hover:shadow-black" type="submit" value="Sign Up">
+    {{ form|crispy }}
+    <input class="bg-blue-500 px-4 py-3 m-3 text-white hover:bg-blue-600 hover:shadow-md hover:shadow-black" type="submit" value="Sign Up">
 </form>
 </div>
 {%endblock%}

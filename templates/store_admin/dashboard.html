@@ -1,13 +1,6 @@
 {%extends 'store_admin/admin_base.html'%}
 {%block title%}Dashboard{%endblock%}
 {%block content%}
-<div class="w-full lg:w-3/4 lg:mx-auto mt-24">
-    <div class="options flex justify-center">
-        <a class="bg-blue-500 text-white my-3 mx-2 p-2 rounded-xl hover:bg-blue-700 hover:shadow-blue-900 hover:shadow-md shadow-sky-700 ease-in-out duration-300 shadow-sm"
-            href="{%url 'store_admin:item_add'%}">+ Add Item</a>
-        <a class="bg-blue-500 text-white my-3 mx-2 p-2 rounded-xl hover:bg-blue-700 hover:shadow-blue-900 hover:shadow-md shadow-sky-700 ease-in-out duration-300 shadow-sm"
-            href="{%url 'store_admin:category_add'%}">+ Add Category</a>
-    </div>
     <div class="flex flex-wrap">
         <div
             class="w-80 h-96 mx-auto pt-0 px-3 text-orange-800 rounded-xl border-2 border-orange-200 shadow-lg hover:shadow-md hover:shadow-orange-900 shadow-orange-800 ease-in-out duration-300 overflow-y-auto m-3">
@@ -25,6 +18,6 @@
         </div>
 
     </div>
-</div>
+
 
 {%endblock%}

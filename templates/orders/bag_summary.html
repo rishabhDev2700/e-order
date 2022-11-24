@@ -51,6 +51,9 @@
         {%endwith%}
         {% endfor %}
         <div class="mx-auto border-2 border-orange-300 rounded-lg p-3 my-4" >Total: <span id="subtotal">{{bag.get_subtotal}}</span></div>
+        {%if user.is_authenticated%}
+        <div class="my-5"><a class="bg-blue-500 text-white py-3 px-4 " href="{%url 'payment:create_payment'%}">Pay</a></div>
+        {%endif%}
     </div>
 
 </div>
@@ -78,8 +81,8 @@
           subtotal = json.subtotal
         }
 
-        document.getElementById("bag-quantity").innerHTML = json.quantity;
-        document.getElementById("subtotal").innerHTMl = json.subtotal;
+        $("#bag-quantity").replaceWith(json.quantity);
+        $("#subtotal").replaceWith(json.subtotal);
       },
       error: function (xhr, errmsg, err) {},
     });
