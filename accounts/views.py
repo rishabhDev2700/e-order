@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.shortcuts import render, redirect
-from django.urls import reverse
+
 
 from accounts.forms import UserCreationForm
 
@@ -31,6 +31,9 @@ def sign_in(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Logged In Successfully")
+            if user.is_superuser:
+                messages.success(request, f"Welcome {user.first_name}")
+                return redirect('store_admin:dashboard')
             return redirect('store:home')
         else:
             messages.error(request, "Invalid Credentials")
