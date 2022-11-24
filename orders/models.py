@@ -10,7 +10,7 @@ class Order(models.Model):
     is_completed = models.BooleanField(default=False)
     total = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
-    razorpay_order_id = models.CharField(max_length=22)
+    razorpay_order_id = models.CharField(max_length=22, unique=True)
     objects = models.Manager()
 
     class Meta:
