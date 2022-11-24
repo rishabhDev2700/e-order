@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -7,7 +9,8 @@ from store_admin.forms import CategoryForm, ItemForm
 
 
 def dashboard(request):
-    context = {}
+    date = datetime.date.today()
+    context = {'date': date}
     return render(request, 'store_admin/dashboard.html', context=context)
 
 
@@ -17,11 +20,12 @@ def category_add(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Category Added Successfully')
-            redirect('dashboard')
+            redirect('store_admin:all_categories')
         else:
             messages.error(request, 'Some Error Occurred!! Please Try Again.')
     form = CategoryForm()
-    context = {'title': 'Add Category', 'form': form}
+    date = datetime.date.today()
+    context = {'title': 'Add Category', 'form': form, 'date': date}
     return render(request, 'store_admin/form.html', context=context)
 
 
@@ -32,11 +36,12 @@ def category_update(request, slug):
         if form.is_valid():
             form.save()
             messages.success(request, 'Category Updated Successfully')
-            redirect('dashboard')
+            redirect('store_admin:dashboard')
         else:
             messages.error(request, "Some Error Occurred!! Please Try Again")
     form = CategoryForm(instance=category)
-    context = {'title': 'Update Category', 'form': form}
+    date = datetime.date.today()
+    context = {'title': 'Update Category', 'form': form, "date": date}
     return render(request, 'store_admin/form.html', context=context)
 
 
@@ -51,13 +56,14 @@ def category_delete(request):
             messages.error(request, "Unable to delete category")
     else:
         messages.error(request, "Invalid request")
-    return redirect('dashboard')
+    return redirect('store_admin:all_categories')
 
 
 def all_categories(request):
     categories = Category.objects.all()
-    context = {'title': 'Categories', 'categories': categories}
-    return render(request, 'store_admin/all_objects.html', context=context)
+    date = datetime.date.today()
+    context = {'title': 'Categories', 'categories': categories, 'date': date}
+    return render(request, 'store_admin/all_categories.html', context=context)
 
 
 def item_add(request):
@@ -66,9 +72,10 @@ def item_add(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Item Added Successfully")
-            return redirect('items')
+            return redirect('store_admin:all_items')
     form = ItemForm()
-    context = {'title': 'Add Item', 'form': form}
+    date = datetime.date.today()
+    context = {'title': 'Add Item', 'form': form, 'date': date}
     return render(request, 'store_admin/form.html', context=context)
 
 
@@ -79,16 +86,17 @@ def item_update(request, slug):
         if form.is_valid():
             form.save()
             messages.success(request, "Item Update Successfully")
-            return redirect('dasboard')
+            return redirect('store_admin:dasboard')
         else:
             messages.error(request, "Some Error Occurred!!")
     form = ItemForm(instance=item)
-    context = {'title': 'Update Item', 'form': form}
+    date = datetime.date.today()
+    context = {'title': 'Update Item', 'form': form, 'date': date}
     return render(request, 'store_admin/form.html', context=context)
 
 
 # noinspection PyBroadException
-def item_delete(request, pk):
+def item_delete(request):
     item_id = request.POST['item_id']
     try:
         item = Item.objects.get(pk=item_id)
@@ -96,15 +104,17 @@ def item_delete(request, pk):
         messages.success(request, "Item deleted Successfully")
     except:
         messages.error(request, 'Some Error Occurred')
-    return redirect('dashboard')
+    return redirect('store_admin:all_items')
 
 
 def all_items(request):
     items = Item.objects.all()
-    context = {'title': 'All Items', 'items': items}
+    date = datetime.date.today()
+    context = {'title': 'All Items', 'items': items, 'date': date}
     return render(request, 'store_admin/all_objects.html', context=context)
 
 
 def view_orders(request):
-    context = {}
+    date = datetime.date.today()
+    context = {'date': date}
     return render(request, 'store_admin/orders.html', context=context)

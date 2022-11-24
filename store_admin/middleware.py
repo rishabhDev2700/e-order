@@ -1,5 +1,6 @@
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpResponse
 
 from django.urls import resolve
 
@@ -20,8 +21,10 @@ class LoginRequiredAccess:
 
         user = request.user
         if resolve(request.path).app_name == self.APP_NAME:  # match app_name defined in myapp.urls.py
-            if not user.is_authenticated and user.is_superuser:
+            if not user.is_authenticated:
                 path = request.get_full_path()
                 return redirect_to_login(path)
+            elif not user.is_superuser:
+                return HttpResponse('Not Allowed')
 
         return self.get_response(request)
