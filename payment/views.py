@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from core import settings
 from orders.bag import Bag
-from orders.models import Order
+from orders.models import Order, OrderItem
 from payment.models import PaymentOrder
 
 client = razorpay.Client(auth=(settings.RAZORPAY_ID, settings.RAZORPAY_SECRET_KEY))
@@ -46,7 +46,6 @@ def payment_handler(request):
             }
             result = client.utility.verify_payment_signature(data)
             if result is not None:
-                # order = Order.objects.get(razorpay_order_id=order_id, user=request.user)
                 try:
                     payment_order = PaymentOrder.objects.get(payment_order_id=order_id)
                     client.payment.capture(payment_id, payment_order.amount*100)
@@ -60,12 +59,17 @@ def payment_handler(request):
                     payment_order.signature = signature
                     payment_order.verified = True
                     payment_order.save()
+                    bag = Bag(request)
+                    for item in bag:
+                        OrderItem.objects.create(order=order,
+                                                 item=item['item'],
+                                                 price=item['total_price'],
+                                                 quantity=item['quantity'], )
                     messages.success(request, "Order placed Successfully")
                     return redirect('orders:summary')
                 except:
                     messages.error(request, "Order Failed")
             else:
-                payment_order = PaymentOrder.objects.get(payment_order_id=order_id)
                 messages.error(request, "Order Failed. Not verified!!")
             return redirect('orders:summary')
         except:
