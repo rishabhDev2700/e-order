@@ -4,13 +4,19 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect
 
+from orders.models import Order, OrderItem
 from store.models import Item, Category
 from store_admin.forms import CategoryForm, ItemForm
 
 
 def dashboard(request):
     date = datetime.date.today()
-    context = {'date': date}
+    incompleted_orders = Order.objects.filter(is_completed=False)
+    orders = []
+    for order in incompleted_orders:
+        order_items = OrderItem.objects.filter(order=order)
+        orders.append([order, order_items])
+    context = {'date': date, 'orders': orders}
     return render(request, 'store_admin/dashboard.html', context=context)
 
 
@@ -116,5 +122,12 @@ def all_items(request):
 
 def view_orders(request):
     date = datetime.date.today()
+    all_orders = Order.objects.all()
+    completed_orders = all_orders.filter(is_completed=True)
+    incompleted_orders = all_orders.filter(is_completed=True)
+    orders = []
+    for order in completed_orders:
+        order_items = OrderItem.objects.filter(order=order)
+        orders.append([order, order_items])
     context = {'date': date}
     return render(request, 'store_admin/orders.html', context=context)
