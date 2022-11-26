@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 from orders.bag import Bag
-from orders.models import Order, OrderItem
+from orders.models import Order
 from store.models import Item
 
 
@@ -56,22 +56,9 @@ def bag_clear(request):
     return JsonResponse({'quantity': 0, 'subtotal': 0, 'message': 'Bag Cleared'})
 
 
-def order_add(request):
-    bag = Bag(request)
-    if request.POST.get("action") == 'post':
-        order_id = request.POST.get('order_id')
-        user_id = request.user.id
-        bag_total = bag.get_subtotal()
-
-        if Order.objects.filter(id=order_id).exists():
-            pass
-        else:
-            order = Order.objects.create(user_id=user_id, total=bag_total)
-            order_id = order.pk
-            for item in bag:
-                OrderItem.objects.create(order_id=order_id,
-                                         item=item['item'],
-                                         price=item['price'],
-                                         quantity=item['quantity'], )
-            response = JsonResponse({"success": "some message"})
-            return response
+def user_orders(request):
+    all_orders = Order.objects.filter(user=request.user)
+    completed = all_orders.filter(is_completed=True)
+    incomplete = all_orders.filter(is_completed=False)
+    context = {"completed": completed, "incomplete": incomplete}
+    return render(request, 'orders/user_orders.html', context=context)
