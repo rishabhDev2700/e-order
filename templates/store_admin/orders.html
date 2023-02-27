@@ -1,3 +1,11 @@
 {%extends 'store_admin/admin_base.html'%}
 {%block title%}{{title}}{%endblock%}
-{%block content%}{%endblock%}
+{%block content%}
+<div>
+    {{date}}
+    {%for order in orders%}
+    <div>{{order.0.id}}|{{orders.0.user.username}}|{{orders.0.total}}|{{orders.0.created_on}}</div>
+    <div>{{order.1.item.name}}|{{order.1.quantity}}|{{order.1.price}}</div>
+    {%endfor%}
+</div>
+{%endblock%}
