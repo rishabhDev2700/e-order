@@ -55,7 +55,7 @@ def category_delete(request):
     if request.method == 'POST':
         try:
             category_id = request.POST['category_id']
-            category = Item.objects.get(id=category_id)
+            category = Category.objects.get(id=category_id)
             category.delete()
             messages.success(request, "Category Delete Successfully")
         except Http404:
@@ -92,7 +92,7 @@ def item_update(request, slug):
         if form.is_valid():
             form.save()
             messages.success(request, "Item Update Successfully")
-            return redirect('store_admin:dasboard')
+            return redirect('store_admin:dashboard')
         else:
             messages.error(request, "Some Error Occurred!!")
     form = ItemForm(instance=item)
@@ -124,10 +124,10 @@ def view_orders(request):
     date = datetime.date.today()
     all_orders = Order.objects.all()
     completed_orders = all_orders.filter(is_completed=True)
-    incompleted_orders = all_orders.filter(is_completed=True)
+    incompleted_orders = all_orders.filter(is_completed=False)
     orders = []
-    for order in completed_orders:
+    for order in incompleted_orders:
         order_items = OrderItem.objects.filter(order=order)
         orders.append([order, order_items])
-    context = {'date': date}
+    context = {'date': date,'orders':orders}
     return render(request, 'store_admin/orders.html', context=context)
