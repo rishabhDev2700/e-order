@@ -13,6 +13,9 @@ class Order(models.Model):
     razorpay_order_id = models.CharField(max_length=22, unique=True)
     objects = models.Manager()
 
+    def __str__(self) -> str:
+        return f'Order by :{self.user} createdon:{self.created_on.date()} total:{self.total}'
+
     class Meta:
         ordering = ['-created_on']
 
@@ -23,3 +26,6 @@ class OrderItem(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=5, default=0)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     objects = models.Manager()
+
+    def __str__(self) -> str:
+        return f'Item:{self.item.name} qnty:{self.quantity}'

@@ -1,11 +1,17 @@
-{%extends 'store_admin/admin_base.html'%}
-{%block title%}{{title}}{%endblock%}
+{%extends 'store_admin/admin_base.html'%} {%block title%}{{title}}{%endblock%}
 {%block content%}
 <div>
-    {{date}}
-    {%for order in orders%}
-    <div>{{order.0.id}}|{{orders.0.user.username}}|{{orders.0.total}}|{{orders.0.created_on}}</div>
-    <div>{{order.1.item.name}}|{{order.1.quantity}}|{{order.1.price}}</div>
-    {%endfor%}
+  {{date}} {%for order in orders%}
+  <div>
+    <div>
+      {{order.0.user.username}}|{{order.0.total}}|{{order.0.created_on}}
+    </div>
+    <hr>
+    {%for item in order.1%}
+    <div>
+      {{item.item.name}}|Quantity:{{item.quantity}}| Price: {{item.price}}
+    </div>
+    {%endfor%} {%endfor%}
+  </div>
+  {%endblock%}
 </div>
-{%endblock%}
