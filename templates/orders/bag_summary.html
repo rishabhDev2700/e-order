@@ -1,28 +1,30 @@
 {%extends 'base.html'%}
 {%block title%}Bag Summary{%endblock%}
 {%block content%}
-<div class="lg:mx-10">
-    <h2 class="text-center text-4xl my-5">Your Bag</h2>
-    <div class="text-center">
-        <button
-                class="rounded-xl my-5 px-4 py-3 text-slate-600 hover:text-white border-2 border-slate-600 hover:bg-slate-600 hover:shadow-md hover:shadow-slate-600 ease-in-out duration-150 text-xl" id="clear-button">
-            Clear
-            Bag
-        </button>
+<div class="bag-summary">
+  <div class="row">
+    <h2 class="title">Your Bag</h2>
+        <span id="clear-button"
+                class="bag-btn">
+            Clear Bag
+    </span>
     </div>
-    <div class="flex flex-col justify-center items-center px-3">
+    <div class="inbag-items">
         {% for item in bag %}
         {%with product=item.item%}
-        <div
-                class="product-card flex justify-around items-center border-2 border-orange-300 rounded-lg mx-3 my-2 p-1  hover:shadow-sm hover:shadow-orange-500 hover:scale-105 ease-in-out duration-200 md:w-96"  data-index="{{product.id}}" id="{{product.id}}">
-            <img class="object-cover w-36 h-36 rounded-xl mx-3" src="{{product.cover.url}}" alt="">
-            <div class="">
-                <div class="text-xl">{{product.name}}</div>
-                <div class="">{{product.category}}</div>
-                <div class="text-black">Price: {{product.price}}</div>
-                <div class="buttons">
-                    <label for="quantity{{product.id}}">Qnty</label>
-                    <select class="m-2" name="quantity" id="quantity{{product.id}}">
+        <div data-index="{{product.id}}" id="{{product.id}}"
+                class="bag-item">
+            <img class="bag-item-img" src="{{product.cover.url}}" alt="">
+            <div class="bag-item-details">
+                <div class="row">
+                  <div class="bag-item-name">{{product.name}}</div>
+                  <div class="bag-item-data">{{product.category}}</div>
+                  <div class="bag-item-data">Price: {{product.price}}</div>
+                </div>
+                <div class="row">
+                    <div class="">
+                      <label for="quantity{{product.id}}">Qnty</label>
+                    <select class="select-btn" name="quantity" id="quantity{{product.id}}">
                         <option value="{{item.quantity}}" selected hidden>{{item.quantity}}</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -35,24 +37,24 @@
                         <option value="9">9</option>
                         <option value="10">10</option>
                     </select>
-                    <div>
-                        <button id="update-button"
-                                class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-2 py-1 rounded-xl m-2 ease-in-out duration-150" data-index="{{product.id}}">
-                            Update
-                        </button>
-                        <button id="remove-button"
-                                class="border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-2 py-1 rounded-xl m-2 ease-in-out duration-150" data-index="{{product.id}}">
-                            Remove
-                        </button>
                     </div>
+                        <div id="update-button" class="btn lightgreen"
+                                class="" data-index="{{product.id}}">
+                            Update
+                        </div>
+                        <div id="remove-button" class="btn red"
+                                class="" data-index="{{product.id}}">
+                            Remove
+                        </div>
                 </div>
             </div>
         </div>
         {%endwith%}
         {% endfor %}
-        <div class="mx-auto border-2 border-orange-300 rounded-lg p-3 my-4" >Total: <span id="subtotal">{{bag.get_subtotal}}</span></div>
+        <div class="total pay" >Total Amount: <span id="subtotal">{{bag.get_subtotal}}</span></div>
+        <div class="total items" >Total Items: <span id="bag-quantity">{{quantity}}</span></div>
         {%if user.is_authenticated%}
-        <div class="my-5"><a class="bg-blue-500 text-white py-3 px-4 " href="{%url 'payment:create_payment'%}">Pay</a></div>
+        <a class="submit-btn pay" href="{%url 'payment:create_payment'%}">Pay</a>
         {%endif%}
     </div>
 
@@ -118,7 +120,7 @@ $(document).on("click", "#clear-button", function (e) {
     url: '{%url 'orders:bag_clear'%}',
     type: 'GET',
   success: function(json) {
-        $('.product-card').remove();
+        $('.bag-item').remove();
 
         $("#bag-quantity").replaceWith(json.quantity);
         $("#subtotal").replaceWith(json.subtotal);
