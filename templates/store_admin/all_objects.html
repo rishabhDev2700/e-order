@@ -1,26 +1,26 @@
 {%extends 'store_admin/admin_base.html'%}
 {%block title%}{{title}}{%endblock%}
 {%block content%}
-<div class="container mx-auto text-center">
-    <h2 class="font-light text-5xl text-center">{{title}}</h2>
-    <div class="flex flex-wrap justify-center">
+<div class="">
+    <h2 class="title">{{title}}</h2>
+    <div class="objects">
         {% for item in items %}
-        <div class="rounded-xl border-2 border-orange-800 flex flex-col justify-evenly group ease-out duration-200 m-3">
-            <img class="rounded-lg object-cover lg:w-96 lg:h-80 group-hover:"
+        <div class="card">
+            <img class="card-img"
                  src="{{item.cover.url}}"
                  alt="">
-            <div class="mt-12">
-                <h2 class="text-2xl font-semibold">{{item.name}}</h2>
-                <div class="text-xl font-normal my-1">{{item.category}}</div>
-                <p class="mb-8">{{item.description}}</p>
-                <div class="flex flex-wrap justify-evenly w-2/3 mx-auto ">
-                    <a class="text-blue-500 border-2 border-blue-500 rounded-sm py-2 px-4 mx-1 my-3 hover:bg-blue-500 hover:text-white hover:scale-105 ease-out duration-200"
+            <div class="card-details">
+                <h2 class="">{{item.name}}</h2>
+                <div class="">{{item.category}}</div>
+                <p class="">{{item.description}}</p>
+                <div class="add-buttons">
+                    <a class="update button"
                        href="{%url 'store_admin:item_update' item.slug %}">Update</a>
                     <form action="{%url 'store_admin:item_delete'%}" method="post">
                         {%csrf_token%}
                         <input type="hidden" name="item_id" value="{{item.id}}">
                         <input type="submit"
-                                class="text-red-500 border-2 border-red-500 rounded-sm py-2 px-4 mx-1 my-3 hover:bg-red-500 hover:text-white  hover:scale-105 ease-out duration-200" value="Remove">
+                                class="delete button" value="Remove">
                     </form>
                 </div>
             </div>

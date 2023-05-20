@@ -1,0 +1,47 @@
+{%extends 'store_admin/admin_base.html'%}
+{% load tailwind_filters %}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<div style="width:20rem;">
+    <canvas id="myChart"></canvas>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 5
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+  
+
+<div class="">
+        <hr>
+    <div class="">{{title}}</div>
+    <div>
+        <hr>
+        <span>Total Sales Today:</span><span>{{total_sales}}</span>
+        <hr>
+        <span>Total Sales this Week:</span><span>{{weekly_sales}}</span>
+        <hr>
+        <span>Total Orders:</span><span>{{total_orders}}</span>
+    </div>
+</div>
+{%endblock%}

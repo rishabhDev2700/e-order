@@ -1,17 +1,80 @@
-{%extends 'store_admin/admin_base.html'%} {%block title%}{{title}}{%endblock%}
-{%block content%}
+{%extends 'store_admin/admin_base.html'%}
 <div>
-  {{date}} {%for order in orders%}
-  <div>
-    <div>
-      {{order.0.user.username}}|{{order.0.total}}|{{order.0.created_on}}
+{%block title%}{{title}}{%endblock%}
+{%block content%}
+<div class="bag-summary">
+  <div class="row">
+    <h2 class="title">Your Orders</h2>
     </div>
-    <hr>
-    {%for item in order.1%}
-    <div>
-      {{item.item.name}}|Quantity:{{item.quantity}}| Price: {{item.price}}
+    <div class="orders">
+        <h3 class="title">Incomplete Orders</h3>
+        <hr>
+        <form action="{%url 'store_admin:mark_orders' %}" method="post">
+            {%csrf_token%}
+        {% for order in incomplete_orders %}
+        <div id="{{order.0.id}}">
+            <div class="order-row">
+                <h3 class="id">Order ID:{{order.0.id}}</h3>
+                <input class="marked" type="checkbox" name="completed_orders[]" value="{{order.0.id}}">
+            </div>
+            <table>
+                <tr>
+                    <th class="name">Item</th>
+                    <th class="qnty">Qnty</th>
+                    <th class="price">Price</th>
+                </tr>
+                {%for item in order.1 %}
+                <tr>
+                    <td class="name">{{item.item.name}}</td>
+                    <td class="qnty">{{item.quantity}}</td>
+                    <td class="price">{{item.price}}</td>
+                </tr>
+                {%endfor%}
+            </table>             
+        </div>
+        {% endfor %}
+        <input class="update button" type="submit" value="Mark as Complete"/>
+    </form>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h3 class="title">Completed Orders</h3>
+        <hr>
+        <form action="{%url 'store_admin:unmark_orders' %}" method="post">
+            {%csrf_token%}
+        {% for order in completed_orders %}
+        <div id="{{order.0.id}}">
+            <div class="order-row">
+                <h3 class="id">Order ID:{{order.0.id}}</h3>
+                <input class="marked" type="checkbox" name="completed_orders[]" value="{{order.0.id}}">
+            </div>
+            <table>
+                <tr>
+                <th class="name">Item</th>
+                <th class="qnty">Qnty</th>
+                <th class="price">Price</th>
+                </tr>
+                {%for item in order.1 %}
+                <tr>
+                    <td class="name">{{item.item.name}}</td>
+                    <td class="qnty">{{item.quantity}}</td>
+                    <td class="price">{{item.price}}</td>
+                </tr>
+                {%endfor%}
+            </table>             
+        </div>
+        {% endfor %}
+            <input class="delete button" type="submit" value="Mark as incomplete"/>
+        </form>
+        <hr>
+       
     </div>
-    {%endfor%} {%endfor%}
-  </div>
-  {%endblock%}
+
+</div>
+
+{%endblock%}
+
 </div>
