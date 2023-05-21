@@ -2,17 +2,17 @@
 {%block title%}{{title}}{%endblock%}
 
 {% block content %}
-        <h1 class="text-4xl my-5 text-center">{{title}}</h1>
-        <div class="flex flex-wrap align-middle content-start lg:w-3/4 lg:mx-auto">
+        <h1 class="title">{{title}}</h1>
+        <div class="items">
             {% for item in items %}
 
-            <a class="m-2 lg:mx-auto self-start" href="{{item.get_absolute_url}}">
-                <div class="item p-3 m-1 border-2 border-orange-200 rounded-xl">
-                    <img class="mx-auto rounded-xl object-cover w-96 h-96" src="{{item.cover.url}}" alt="">
-                    <div class="m-3">
-                        <h2 class="my-2 text-xl">{{item.name}}</h2>
-                        <div class="category font-normal">{{item.category}}</div>
-                        <div class="price font-bold text-xl my-2">₹ {{item.price}}</div>
+            <a class="card" href="{{item.get_absolute_url}}">
+                <div class="">
+                    <img class="card-img" src="{{item.cover.url}}" alt="">
+                    <div class="card-details">
+                        <h2 class="item-name">{{item.name}}</h2>
+                        <div class="">{{item.category}}</div>
+                        <div class="item-price">Rs. {{item.price}}</div>
                     </div>
                 </div>
             </a>

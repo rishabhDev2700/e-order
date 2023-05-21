@@ -1,15 +1,31 @@
 {%extends 'base.html'%}
-{% load tailwind_filters %}
+{%load tailwind_filters %}
+{%load static%}
 {%block css%}
 {%endblock%}
 {%block title%}Sign Up{%endblock%}
 {%block content%}
-<div class="mx-auto bg-white h-screen">
-    <h1 class="text-center text-4xl my-5 text-black">Sign up</h1>
-<form action="{%url 'accounts:sign_up'%}" method="post" class="bg-white text-black mx-auto w-80 my-5">
+<div class="form-wrapper">
+    <form action="{%url 'accounts:sign_up'%}" method="post" class="form">
+    <h1 class="title">Sign up</h1>
     {%csrf_token%}
-    {{ form|crispy }}
-    <input class="bg-blue-500 px-4 py-3 m-3 text-white hover:bg-blue-600 hover:shadow-md hover:shadow-black" type="submit" value="Sign Up">
+    {%for field in form%}
+    {% if form.subject.errors %}
+        <ol>
+            {% for error in field.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+    {{field.label_tag}}
+    <div class="field">{{field}}</div>
+        {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+    {%endfor%}
+    <input class="submit-btn" type="submit" value="Sign Up">
 </form>
+    <video class="vid" autoplay muted loop src="{%static 'pexels-pizza.mp4'%}"  alt="Foodie's Stop">
 </div>
 {%endblock%}

@@ -5,33 +5,27 @@ Foodie's Stop
 {% endblock title %}
 {% block content %}
 <div class="">
-
-    <div class="relative -z-20">
-        <img class="object-cover brightness-50 md:max-h-96" width="100%"
-             src="{%static 'anh-nguyen-kcA-c3f_3FE-unsplash.jpg'%}" alt="">
-        <div class="hero-text text-white absolute top-1/3 left-1/4 text-5xl font-extrabold">Delicious</div>
-    </div>
-    <div class="categories">
-        <h2 class="font-bold bg-orange-500 text-white text-4xl text-center py-3">Categories</h2>
-        <div class="overflow-x-auto text-2xl p-1 flex flex-shrink-0 justify-center">
-            {%for category in categories%}
-            <a class="px-4 py-2 rounded-full bg-orange-500 text-white inline-block my-2 mx-2 hover:bg-orange-700 ease-in-out duration-200"
-               href="{{category.get_absolute_url}}">{{category.name}}</a>
-            {%endfor%}
-        </div>
-    </div>
-    <div class="most-ordered p-2 text-center font-bold mx-auto">
-        <h2 class="text-4xl my-4">Most Ordered Items</h2>
-        <div class="overflow-x-auto flex justify-start items-stretch flex-shrink-0 flex-grow-0 mx-auto p-2 snap-x">
+    <div class="row">
+        <h3 class="title">The Menu</h3>
+        <div class="categories">
+                {%for category in categories%}
+                <a class="capsule"
+                   href="{{category.get_absolute_url}}">{{category.name}}</a>
+                {%endfor%}
+        </div></div>
+    <div class="wrapper">
+        <div class="items">
             {% for item in items %}
-            <a class="no-underline snap-center" href="{{ item.get_absolute_url }}">
-                <div class="card w-80 mx-2 border-2 self-stretch border-orange-300 rounded-lg hover:bg-orange-100 lg:m-2 lg:hover:scale-105 ease-in-out duration-300">
-                    <div class=""><img class="w-80 h-72 object-cover rounded-md" src="{{item.cover.url}}"
-                                       alt=""></div>
-                    <div class="mx-2 my-3">
-                        <div class="">{{item.name}}</div>
-                        <div class="">Category: {{item.category}}</div>
-                        <div class="price">₹ {{item.price}}</div>
+            <a class="card" href="{{ item.get_absolute_url }}">
+                <div class="">
+                    <div class="thumbnail">
+                        <img class="card-img" src="{{item.cover.url}}" alt="">
+                    </div>
+                    <div class="card-details">
+                        <div class="item-name">{{item.name}}</div>
+                        <div class="item-category">Category: {{item.category}}</div>
+                        <div class="item-description">{{item.description}}</div>
+                        <div class="item-price">Rs. {{item.price}}</div>
                     </div>
                 </div>
             </a>

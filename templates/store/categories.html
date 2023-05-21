@@ -2,15 +2,15 @@
 {%block title%}{{title}}{%endblock%}
 
 {% block content %}
- <h1 class="text-3xl text-center my-3">{{title}}</h1>
-        <div class="flex justify-start content-start flex-wrap">
+ <h1 class="title">{{title}}</h1>
+        <div class="items">
             {% for category in categories %}
 
-            <a href="{{category.get_absolute_url}}">
-                <div class="item p-3 m-3 border-2 border-orange-200 rounded-xl">
-                    <img class="mx-auto rounded-xl object-cover w-80 h-72" src="{{category.cover.url}}" alt="">
-                    <div class="m-3">
-                        <h2 class="my-2 text-xl">{{category.name}}</h2>
+            <a class="card" href="{{category.get_absolute_url}}">
+                <div class="">
+                    <img class="card-img" src="{{category.cover.url}}" alt="">
+                    <div class="card-details">
+                        <h2 class="">{{category.name}}</h2>
                     </div>
                 </div>
             </a>

@@ -4,19 +4,19 @@
 
 {%block content%}
 
-<h1 class="text-3xl text-center">{{title}}</h1>
+<h1 class="title">{{title}}</h1>
 
-<div class="flex flex-col lg:flex-row justify-around border-2 border-orange-200 rounded-lg m-2 lg:mx-auto lg:w-1/2">
-    <img class="m-2 rounded-lg lg:object-cover lg:w-96" src="{{item.cover.url}}" alt="">
-    <div class="mx-2 text-justify relative">
-        <h2 class="text-xl mt-12">{{item.name}}</h2>
-        <p class="font-thin lg:my-12">Description Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quas
+<div class="">
+    <img class="card-img" src="{{item.cover.url}}" alt="">
+    <div class="card-details">
+        <h2 class="item-name">{{item.name}}</h2>
+        <p class="item-description">Description Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quas
             eligendi tempora reiciendis explicabo laborum fugit modi sunt. Provident nam atque quaerat neque mollitia
             omnis praesentium placeat minus alias soluta.</p>
-        <div class="text-lg my-2">Price: ₹ <span class="text-black font-bold">{{item.price}}</span></div>
+        <div class="item-price">Price: Rs. <span class="">{{item.price}}</span></div>
         <label for="quantity{{item.id}}"></label>
         {%if user.is_authenticated%}
-        <select class="p-4   m-2" name="quantity" id="quantity{{item.id}}">
+        <select class="" name="quantity" id="quantity{{item.id}}">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -28,11 +28,11 @@
             <option value="9">9</option>
             <option value="10">10</option>
         </select>
-        <button class="rounded-lg bg-blue-500 text-white p-3 my-3 hover:bg-blue-600" id="add-button"
+        <button class="" id="add-button"
                 value="{{item.id}}">Add to Bag
         </button>
         {%else%}
-        <div>Login to order <a class="text-orange-400 border-2 border-orange-500 p-1 m-1" href="{%url 'accounts:sign_in'%}">Login</a></div>
+        <div>Login to order <a class="capsule blue" href="{%url 'accounts:sign_in'%}">Login</a></div>
         {%endif%}
     </div>
 </div>
