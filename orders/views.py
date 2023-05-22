@@ -2,14 +2,14 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 from orders.bag import Bag
-from orders.models import Order
+from orders.models import Order, OrderItem
 from store.models import Item
 
 
 # Create your views here.
 def bag_summary(request):
     bag = Bag(request)
-    context = {'bag': bag}
+    context = {'bag': bag,'quantity':bag.__len__()}
     return render(request, 'orders/bag_summary.html', context=context)
 
 
@@ -56,9 +56,17 @@ def bag_clear(request):
     return JsonResponse({'quantity': 0, 'subtotal': 0, 'message': 'Bag Cleared'})
 
 
-def user_orders(request):
+def view_orders(request):
     all_orders = Order.objects.filter(user=request.user)
+    incompleted = all_orders.filter(is_completed=False)
+    incompleted_orders = []
+    for order in incompleted:
+        items = OrderItem.objects.filter(order=order)
+        incompleted_orders.append([order,items])
     completed = all_orders.filter(is_completed=True)
-    incomplete = all_orders.filter(is_completed=False)
-    context = {"completed": completed, "incomplete": incomplete}
-    return render(request, 'orders/user_orders.html', context=context)
+    completed_orders=[]
+    for order in completed:
+        items = OrderItem.objects.filter(order=order)
+        completed_orders.append([order,items])
+    context = {"completed_orders": completed_orders, "incompleted_orders": incompleted_orders}
+    return render(request, 'orders/view_orders.html', context=context)

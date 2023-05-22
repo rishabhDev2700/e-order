@@ -14,7 +14,7 @@ class Order(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f'Order by :{self.user} createdon:{self.created_on.date()} total:{self.total}'
+        return f'Order by :{self.user} createdon:{self.created_on} total:{self.total} completed:{self.is_completed}'
 
     class Meta:
         ordering = ['-created_on']
