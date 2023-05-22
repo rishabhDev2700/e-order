@@ -3,6 +3,7 @@ import datetime
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect
+from django.utils import timezone
 
 from orders.models import Order, OrderItem
 from store.models import Item, Category
@@ -10,13 +11,19 @@ from store_admin.forms import CategoryForm, ItemForm
 
 
 def dashboard(request):
-    date = datetime.date.today()
-    incompleted_orders = Order.objects.filter(is_completed=False)
+    date = datetime.date.today().strftime("%d-%m-%Y")
+    current_date = timezone.now()
+    orders = Order.objects.filter(created_on__gt=current_date.date())
+    incompleted_orders = orders.filter(is_completed=False)
+    total_sales = 0
+    total_incomplete_orders = incompleted_orders.count()
+    for order in orders:
+        total_sales+=order.total
     orders = []
     for order in incompleted_orders:
         order_items = OrderItem.objects.filter(order=order)
         orders.append([order, order_items])
-    context = {'date': date, 'orders': orders}
+    context = {'date': date, 'orders': orders,'total_incomplete_orders':total_incomplete_orders,'total_sales':total_sales}
     return render(request, 'store_admin/dashboard.html', context=context)
 
 
@@ -123,11 +130,48 @@ def all_items(request):
 def view_orders(request):
     date = datetime.date.today()
     all_orders = Order.objects.all()
-    completed_orders = all_orders.filter(is_completed=True)
-    incompleted_orders = all_orders.filter(is_completed=False)
-    orders = []
-    for order in incompleted_orders:
-        order_items = OrderItem.objects.filter(order=order)
-        orders.append([order, order_items])
-    context = {'date': date,'orders':orders}
+    incompleted = all_orders.filter(is_completed=False)
+    incompleted_orders = []
+    for order in incompleted:
+        items = OrderItem.objects.filter(order=order)
+        incompleted_orders.append([order,items])
+    completed = all_orders.filter(is_completed=True)
+    completed_orders=[]
+    for order in completed:
+        items = OrderItem.objects.filter(order=order)
+        completed_orders.append([order,items])
+    context = {'date': date,'completed_orders':completed_orders,'incomplete_orders':incompleted_orders}
     return render(request, 'store_admin/orders.html', context=context)
+
+def sales_today(request):
+    current_date = timezone.now()
+    start_date = current_date - datetime.timedelta(days=7)
+    all_orders = Order.objects.all()
+    orders_last_week = all_orders.filter(created_on__range=[start_date,current_date])
+    weekly_sales=0
+    for order in orders_last_week:
+        weekly_sales+=order.total
+    orders = all_orders.filter(created_on__gt=current_date.date())
+    total_sales = 0
+    total_orders = orders.count()
+    for order in orders:
+        total_sales+=order.total
+    title="Sales Today"
+    context = {'title':title,'total_orders':total_orders,'total_sales':total_sales,'weekly_sales':weekly_sales}
+    return render(request,'store_admin/sales.html',context=context)
+
+def mark_order_status(request):
+    if request.method=='POST':
+        order_ids = request.POST.getlist('completed_orders[]')
+        order_ids = list(map(lambda x: int(x),order_ids))
+        Order.objects.filter(id__in=order_ids).update(is_completed=True)
+        messages.success(request,"Marked orders successfully!")
+        return redirect('store_admin:view_orders')
+
+def unmark_order_status(request):
+    if request.method=='POST':
+        order_ids = request.POST.getlist('completed_orders[]')
+        order_ids = list(map(lambda x: int(x),order_ids))
+        Order.objects.filter(id__in=order_ids).update(is_completed=False)
+        messages.success(request,"Un-Marked orders successfully!")
+        return redirect('store_admin:view_orders')
