@@ -23,6 +23,7 @@ class Category(models.Model):
 class Item(models.Model):
     name = models.CharField(max_length=40)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    description= models.TextField(default="",max_length=200)
     cover = models.ImageField(upload_to='item_imgs/')
     price = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=False)

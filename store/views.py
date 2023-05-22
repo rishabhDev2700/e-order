@@ -7,7 +7,7 @@ from store.models import Item, Category
 
 def home(request):
     categories = Category.objects.all()
-    items = Item.objects.filter(is_available=True)[:5]
+    items = Item.objects.filter(is_available=True)[:9]
     context = {'categories': categories, 'items': items}
     return render(request, 'store/home.html', context=context)
 
