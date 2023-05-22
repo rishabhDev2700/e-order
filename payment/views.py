@@ -14,6 +14,9 @@ client = razorpay.Client(auth=(settings.RAZORPAY_ID, settings.RAZORPAY_SECRET_KE
 
 def create_payment_order(request):
     amount = int(Bag(request).get_subtotal().__str__())
+    if amount<10:
+        messages.error(request,"Total Amount should be greater than or equal to 10!")
+        return redirect('orders:summary')
     razorpay_order = client.order.create(dict(
         amount=(amount * 100),
         currency='INR',
